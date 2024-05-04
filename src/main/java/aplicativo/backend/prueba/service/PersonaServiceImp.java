@@ -44,6 +44,7 @@ public class PersonaServiceImp implements PersonaService {
    }
 
    //listar personas
+   
 	@Override
 	public ResponseData findAll() {
 		ResponseData response = new ResponseData();
@@ -104,6 +105,9 @@ public class PersonaServiceImp implements PersonaService {
 	}
 
 	// guardar y actualizar persona
+	/**
+	 * 
+	 */
 	@Override
 	public ResponseData save( Persona persona, Integer id) {
 
@@ -128,8 +132,8 @@ public class PersonaServiceImp implements PersonaService {
 
 					personaRepository.save(personaresponse);
 
-					response.setCode(MessageUtil.UPDATED.name());
-					response.setMessage(MessageUtil.UPDATED.getKey());
+					response.setCode(MessageUtil.OK.name());
+					response.setMessage(MessageUtil.OK.getKey());
 
 				} else {
 					response.setCode(MessageUtil.NOTFOUND.name());
@@ -138,8 +142,8 @@ public class PersonaServiceImp implements PersonaService {
 
 			} else {
 				personaRepository.save(persona);
-				response.setCode(MessageUtil.CREATED.name());
-				response.setMessage(MessageUtil.CREATED.getKey());
+				response.setCode(MessageUtil.OK.name());
+				response.setMessage(MessageUtil.OK.getKey());
 
 			}
 			

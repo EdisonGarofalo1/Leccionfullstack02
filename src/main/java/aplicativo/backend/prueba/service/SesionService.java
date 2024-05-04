@@ -8,10 +8,11 @@ import aplicativo.backend.prueba.response.ResponseData;
 public interface SesionService  {
 	
 
-	public ResponseData login(Usuario usuario) ;
+	public ResponseData login( String usuariomail,String password) ;
 	
-	public ResponseData logout(Usuario usuario) ;
+	public ResponseData logout(String username) ;
 	public ResponseData recuperarPassword(String username) ;
-	
+	public ResponseData buscarHistorialSesiones(String identificacion) ;
+
 
 }

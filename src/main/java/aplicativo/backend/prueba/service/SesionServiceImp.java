@@ -2,6 +2,7 @@ package aplicativo.backend.prueba.service;
 
 import java.sql.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.modelmapper.ModelMapper;
@@ -32,16 +33,17 @@ public class SesionServiceImp implements  SesionService{
 	    private ModelMapper modelMapper;
 
 	@Override
-	public ResponseData login(Usuario usuario)  {
+	public ResponseData login(String usuariomail,String password)  {
+		Map<String, Object> mapUser = new HashMap<>();
 		
 		ResponseData response = new ResponseData();
 		try {
-			 Usuario usuarioDb = usuarioRepository.findByUsernameOrEmail(usuario.getUserName(),usuario.getMail());
+			 Usuario usuarioDb = usuarioRepository.findByUsernameOrEmail(usuariomail,usuariomail);
 
                  if(usuarioDb != null ) {
 			 
 			 
-			 if ( usuarioDb.getPassword().equals(usuario.getPassword())) {
+			 if ( usuarioDb.getPassword().equals(password)) {
 		        	
 				 if(usuarioDb.getStatus() != null && usuarioDb.getStatus().trim().equalsIgnoreCase("Bloqueado")) {
 					 response.setMessage("El usuario está bloqueado. Contacte al administrador.");;
@@ -67,9 +69,14 @@ public class SesionServiceImp implements  SesionService{
 	             sesion.setFechaIngreso(new Date(System.currentTimeMillis()));
 	           
 	             sesionRepository.save(sesion);
+	             usuarioDTO userDTO = convertToDTO(usuarioDb);
+					
+					mapUser.put("user", userDTO);
+					
 	   
-	             response.setMessage("Se logio con exito");
-	             response.setCode("90283989n398293893282393829328329");
+	             response.setMessage("Se logueo con exito");
+	             response.setCode(usuarioDb.getRoles().get(0).getRolName());
+	             response.setData(mapUser);
 	             return response;
 	            
 				 }
@@ -77,7 +84,7 @@ public class SesionServiceImp implements  SesionService{
 	        	
 	        	 int intentosFallidos = usuarioDb != null ? usuarioDb.getIntentosFallidos() + 1 : 1;
 	             if (intentosFallidos >= 3) {
-	                 usuarioDb.setStatus("Bloqueado");
+	                 usuarioDb.setStatus("B");
 	                 response.setMessage("El usuario ha sido bloqueado después de tres intentos fallidos.");
 	             
 	               
@@ -108,10 +115,10 @@ public class SesionServiceImp implements  SesionService{
 	}
 
 	@Override
-	public ResponseData logout(Usuario usuario)  {
+	public ResponseData logout(String usuariomail)  {
 		ResponseData response = new ResponseData();
 		try {
-			 Usuario usuarioDb = usuarioRepository.findByUsernameOrEmail(usuario.getUserName(),usuario.getMail());
+			 Usuario usuarioDb = usuarioRepository.findByUsernameOrEmail(usuariomail,usuariomail);
 		
 			 if (usuarioDb != null) {
 				 usuarioDb.setSessionActive("E");
@@ -121,13 +128,19 @@ public class SesionServiceImp implements  SesionService{
 					 sesionAbierta.setFechaCierre( new Date(System.currentTimeMillis()));
 					 sesionRepository.save(sesionAbierta);
 					 
-				 }  
+					 usuarioDb.setSessionActive("E");
+			            
+			            usuarioRepository.save(usuarioDb);
+			            response.setMessage("Sesión cerrada  corretamente.");
+			            response.setCode("ok");
+					 
+				 }else {
+					 
+					 response.setMessage("No hay Sesión abierta.");
+					 
+				 }
 				 
-	        usuarioDb.setSessionActive("E");
-            
-            usuarioRepository.save(usuarioDb);
-            response.setMessage("Sesión cerrada  corretamente.");
-            response.setCode("201");
+	       
 			 
 			 }else {
 				 
@@ -184,5 +197,38 @@ public class SesionServiceImp implements  SesionService{
 	        return modelMapper.map(user, usuarioDTO.class); // Si estás utilizando ModelMapper
 	       
 	    }
+
+	@Override
+	public ResponseData buscarHistorialSesiones(String identificacion) {
+		
+
+		ResponseData response = new ResponseData();
+
+		Map<String, Object> mapUsuario = new HashMap<>();
+		try {
+
+			 List<Sesion> data = sesionRepository.buscarHistorialPorIdentificacion(identificacion);
+		
+			if (data != null) {
+				
+				mapUsuario.put("Usuario", data);
+				response.setData(mapUsuario);
+
+				response.setCode(MessageUtil.OK.name());
+				response.setMessage(MessageUtil.OK.getKey());
+			} else {
+				response.setCode(MessageUtil.NOTFOUND.name());
+				response.setMessage(MessageUtil.NOTFOUND.getKey());
+			}
+
+		} catch (Exception e) {
+
+			response.setCode(MessageUtil.ERRORCONSULTA.name());
+			response.setMessage(MessageUtil.ERRORCONSULTA.getKey() + e.getMessage());
+		}
+	
+	return response;
+
+	}
 
 }

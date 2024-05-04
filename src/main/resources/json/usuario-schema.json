@@ -28,7 +28,7 @@
     },
     "status": {
       "type": "string",
-      "enum": ["Activo", "Inactivo","Pendiente"] 
+      "enum": ["A", "I","B"] 
     },
     "roles": {
       "type": "array",

@@ -135,8 +135,8 @@ public class UsuarioServiceImp implements UsuarioService {
 
 					usuarioRepository.save(usuario);
 
-					response.setCode(MessageUtil.UPDATED.name());
-					response.setMessage(MessageUtil.UPDATED.getKey());
+					response.setCode(MessageUtil.OK.name());
+					response.setMessage(MessageUtil.OK.getKey());
 
 				} else {
 
@@ -183,8 +183,8 @@ public class UsuarioServiceImp implements UsuarioService {
 
 					usuarioRepository.save(usuario);
 
-					response.setCode(MessageUtil.CREATED.name());
-					response.setMessage(MessageUtil.CREATED.getKey());
+					response.setCode(MessageUtil.OK.name());
+					response.setMessage(MessageUtil.OK.getKey());
 
 				} else {
 					response.setCode(MessageUtil.NOTFOUND.name());
@@ -217,7 +217,7 @@ public class UsuarioServiceImp implements UsuarioService {
 
 			if (optionalUsuario.isPresent()) {
 				Usuario usuario = optionalUsuario.get();
-				usuario.setStatus("Eliminado");
+				usuario.setStatus("E");
 				usuarioRepository.save(usuario);
 				response.setCode(MessageUtil.DELETED.name());
 				response.setMessage(MessageUtil.DELETED.getKey());

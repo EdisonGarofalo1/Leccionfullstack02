@@ -111,8 +111,8 @@ public class RolServiceImp implements RolService{
 						
 						rolRepository.save(rolreponse);
 
-						response.setCode(MessageUtil.UPDATED.name());
-						response.setMessage(MessageUtil.UPDATED.getKey());
+						response.setCode(MessageUtil.OK.name());
+						response.setMessage(MessageUtil.OK.getKey());
 
 					} else {
 						response.setCode(MessageUtil.NOTFOUND.name());
@@ -123,8 +123,8 @@ public class RolServiceImp implements RolService{
 					
 					
 					rolRepository.save(rol);
-					response.setCode(MessageUtil.CREATED.name());
-					response.setMessage(MessageUtil.CREATED.getKey());
+					response.setCode(MessageUtil.OK.name());
+					response.setMessage(MessageUtil.OK.getKey());
 				}
 			} catch (Exception e) {
 				response.setCode(MessageUtil.INTERNALERROR.name());

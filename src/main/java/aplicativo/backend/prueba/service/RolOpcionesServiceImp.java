@@ -102,8 +102,8 @@ public class RolOpcionesServiceImp  implements RolOpcionesService{
 					
 					rolOpcionesRepository.save(rolopcionesresponse);
 
-					response.setCode(MessageUtil.UPDATED.name());
-					response.setMessage(MessageUtil.UPDATED.getKey());
+					response.setCode(MessageUtil.OK.name());
+					response.setMessage(MessageUtil.OK.getKey());
 
 				} else {
 					response.setCode(MessageUtil.NOTFOUND.name());
@@ -114,8 +114,8 @@ public class RolOpcionesServiceImp  implements RolOpcionesService{
 				
 				
 				rolOpcionesRepository.save(rolOpciones);
-				response.setCode(MessageUtil.CREATED.name());
-				response.setMessage(MessageUtil.CREATED.getKey());
+				response.setCode(MessageUtil.OK.name());
+				response.setMessage(MessageUtil.OK.getKey());
 			}
 		} catch (Exception e) {
 			response.setCode(MessageUtil.INTERNALERROR.name());

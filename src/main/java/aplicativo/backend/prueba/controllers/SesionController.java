@@ -25,26 +25,34 @@ public class SesionController {
 	private  SesionService sesionService;
 	
 	
-	@PostMapping("/login")
-	 @ResponseBody
-	public ResponseData login(@RequestBody Usuario usuario)  {
-		
-		
+
+
 	
-            return sesionService.login(usuario);
-            
-    
+	@PostMapping("/login")
+	public ResponseData login(@RequestBody Map<String, Object> requestBody) {
+	  
+	   
+	    String usuariomail = (String) requestBody.get("usuariomail");
+	    
+	    String password = (String) requestBody.get("password");
+	    
+	    return sesionService.login(usuariomail,password);
+	    
+	
 	}
+
 	
 	
 	
 	@PostMapping("/logout")
-	 @ResponseBody
-	public ResponseData logout(@RequestBody Usuario usuario) {
+	 
+	public ResponseData logout(@RequestBody Map<String, String> requestBody) {
 		
-		
+           String usuariomail = (String) requestBody.get("usuariomail");
+	    
+	  
 	
-            return sesionService.logout(usuario);
+            return sesionService.logout(usuariomail);
             
      
 	}
@@ -55,4 +63,13 @@ public class SesionController {
 	    return sesionService.recuperarPassword(username);
 	}
 
+	
+	@PostMapping("/buscarHistorialSesiones")
+	public ResponseData buscarHistorialSesiones(@RequestBody Map<String, String> requestBody) {
+		String identificacion = requestBody.get("identificacion");
+	    return sesionService.buscarHistorialSesiones(identificacion);
+	}
+
+	
+	
 }

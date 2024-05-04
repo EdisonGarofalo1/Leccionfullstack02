@@ -11,6 +11,17 @@ public class usuarioDTO {
 
  
     private String mail;
+    private String nombres;
+
+
+	public String getNombres() {
+		return nombres;
+	}
+
+
+	public void setNombres(String nombres) {
+		this.nombres = nombres;
+	}
 
 
 	public String getUserName() {
